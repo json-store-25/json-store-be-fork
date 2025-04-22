@@ -13,6 +13,7 @@ import java.util.UUID;
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
 
     Optional<Delivery> findByUid(UUID uid);
+    Optional<Delivery> findByUlid(UUID ulid);
 
     @Query("SELECT new deepdive.jsonstore.domain.delivery.dto.DeliveryResponseDTO(d.address, d.zipCode, d.phone, d.recipient) " +
             "FROM Delivery d " +

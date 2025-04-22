@@ -75,7 +75,7 @@ public class MemberJwtAuthenticationFilter extends OncePerRequestFilter {
     private boolean isMemberProtectedPath(String uri) {
         return uri.startsWith("/api/v1/member") ||
                 uri.startsWith("/api/v1/cart") ||
-                uri.startsWith("/api/v1/delivery") ||
+                uri.startsWith("/api/v1/delivery") || uri.startsWith("/api/v2/delivery") ||
                 uri.startsWith("/api/v1/orders") ||
                 uri.startsWith("/api/v1/fcm-tokens") ||
                 uri.startsWith("/api/v1/notifications");
