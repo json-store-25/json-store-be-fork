@@ -1,5 +1,6 @@
 package deepdive.jsonstore.domain.order.dto;
 
+import deepdive.jsonstore.common.util.UlidUtil;
 import deepdive.jsonstore.domain.order.entity.Order;
 import deepdive.jsonstore.domain.order.entity.OrderStatus;
 import lombok.Builder;
@@ -12,7 +13,9 @@ import java.util.stream.Collectors;
 public record OrderResponse(
 
         UUID orderUid, // 주문번호
+        String orderUlid, // 주문번호
         UUID memberUid, // 주문자
+        String memberUlid, // 주문자
         String username,
         List<OrderProductResponse> orderProducts, // 주문할 상품
         OrderStatus orderStatus,
@@ -28,7 +31,9 @@ public record OrderResponse(
                 .collect(Collectors.toList());
         return OrderResponse.builder()
                 .orderUid(order.getUid())
+                .orderUlid(UlidUtil.getUlidString(order.getUlid()))
                 .memberUid(order.getMember().getUid())
+                .memberUlid(UlidUtil.getUlidString(order.getMember().getUlid()))
                 .orderStatus(order.getOrderStatus())
                 .recipient(order.getRecipient())
                 .phone(order.getPhone())
