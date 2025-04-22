@@ -1,6 +1,7 @@
 package deepdive.jsonstore.domain.order.entity;
 
 import deepdive.jsonstore.common.entity.BaseEntity;
+import deepdive.jsonstore.common.util.UlidUtil;
 import deepdive.jsonstore.domain.admin.dto.OrderUpdateResponse;
 import deepdive.jsonstore.domain.member.entity.Member;
 import jakarta.persistence.*;
@@ -25,6 +26,10 @@ public class Order extends BaseEntity {
     @Builder.Default
     @Column(unique = true, columnDefinition = "BINARY(16)", nullable = false)
     private UUID uid = UUID.randomUUID();
+
+    @Builder.Default
+    @Column(unique = true, columnDefinition = "BINARY(16)", nullable = false)
+    private byte[] ulid = UlidUtil.createUlidBytes();
 
     @ManyToOne
     @JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
