@@ -132,22 +132,22 @@ public class OrderService {
      * 재고를 확인하고 주문서를 생성합니다.
      *
      * @param memberUid     주문자 ULID 아이디
-     * @param orderRequest 주문 요청 Dto
+     * @param orderRequestV2 주문 요청 Dto
      * @return 주문서 Dto
      */
-    public byte[] createOrder(byte[] memberUid, OrderRequest orderRequest) {
+    public byte[] createOrder(byte[] memberUid, OrderRequestV2 orderRequestV2) {
         var member = memberValidationService.findByUid(memberUid);
-        List<OrderProduct> orderProducts = createOrderProducts(orderRequest);
+        List<OrderProduct> orderProducts = createOrderProducts(orderRequestV2);
         int total = calculateTotalAmount(orderProducts);
 
         // 주문 생성 및 저장
         var order = Order.builder()
                 .orderStatus(OrderStatus.CREATED)
                 .member(member)
-                .phone(orderRequest.phone())
-                .recipient(orderRequest.recipient())
-                .address(orderRequest.address())
-                .zipCode(orderRequest.zipCode())
+                .phone(orderRequestV2.phone())
+                .recipient(orderRequestV2.recipient())
+                .address(orderRequestV2.address())
+                .zipCode(orderRequestV2.zipCode())
                 .total(total)
                 .build();
 

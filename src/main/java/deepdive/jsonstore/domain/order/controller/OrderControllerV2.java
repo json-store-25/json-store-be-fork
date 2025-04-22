@@ -28,9 +28,9 @@ public class OrderControllerV2 {
     @PostMapping
     public ResponseEntity<Void> createOrder(
             @AuthenticationPrincipal(expression="uid") String memberUid,
-            @RequestBody OrderRequest orderRequest) {
+            @RequestBody OrderRequestV2 orderRequestV2) {
         var memberUlid = ULID.parseULID(memberUid);
-        var orderUid = orderService.createOrder(memberUlid.toBytes(), orderRequest);
+        var orderUid = orderService.createOrder(memberUlid.toBytes(), orderRequestV2);
         return ResponseEntity.created(
                 URI.create("/api/v1/orders/" + orderUid.toString())
         ).build();
