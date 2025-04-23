@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @Builder
 public record OrderProductRequestV2(
-        String productUid,
+        String productUlid,
         int quantity
 ){
 

@@ -5,6 +5,7 @@ import deepdive.jsonstore.domain.order.entity.Order;
 import deepdive.jsonstore.domain.order.entity.OrderStatus;
 import lombok.Builder;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -31,9 +32,9 @@ public record OrderResponse(
                 .collect(Collectors.toList());
         return OrderResponse.builder()
                 .orderUid(order.getUid())
-                .orderUlid(UlidUtil.getUlidString(order.getUlid()))
+                .orderUlid(Base64.getUrlEncoder().encodeToString(order.getUlid()))
                 .memberUid(order.getMember().getUid())
-                .memberUlid(UlidUtil.getUlidString(order.getMember().getUlid()))
+                .memberUlid(Base64.getUrlEncoder().encodeToString(order.getMember().getUlid()))
                 .orderStatus(order.getOrderStatus())
                 .recipient(order.getRecipient())
                 .phone(order.getPhone())

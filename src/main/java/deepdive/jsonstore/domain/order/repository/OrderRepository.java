@@ -1,7 +1,5 @@
 package deepdive.jsonstore.domain.order.repository;
 
-import de.huxhorn.sulky.ulid.ULID;
-import deepdive.jsonstore.domain.order.dto.OrderResponse;
 import deepdive.jsonstore.domain.order.entity.Order;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.persistence.LockModeType;
@@ -19,10 +17,12 @@ import java.util.UUID;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     Optional<Order> findByUid(UUID uid);
-    Optional<Order> findByUid(byte[] ulid);
+    Optional<Order> findByUlid(byte[] ulid);
+    Optional<Order> findByUidAndMemberId(UUID uid, Long memberId);
+    Optional<Order> findByUlidAndMemberId(byte[] ulid, Long memberId);
 
-    Page<Order> findByUid(UUID uid, Pageable pageable);
-    Page<Order> findByUid(byte[] ulid, Pageable pageable);
+
+    Page<Order> findByMemberId(long id, Pageable pageable);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""
