@@ -22,8 +22,8 @@ public class Delivery extends BaseEntity {
     @Column(nullable = false)
     private UUID uid;
 
-    @Column(nullable = false)
-    private UUID ulid;
+    @Column(nullable = false, unique = true, columnDefinition = "BINARY(16)")
+    private byte[] ulid;
 
     @Setter
     @Column(nullable = false)

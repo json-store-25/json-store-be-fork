@@ -19,7 +19,7 @@ public record DeliveryRegRequestDTO(
                 .phone(phone)
                 .recipient(recipient)
                 .uid(UUID.randomUUID())
-                .ulid(UlidUtil.createUlid())
+                .ulid(UlidUtil.createUlidBytes())
                 .member(member)
                 .build();
     }

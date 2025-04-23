@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.UUID;
 
 @Slf4j
@@ -20,12 +21,19 @@ public class DeliveryValidationService {
         return deliveryRepository.findByUid(uid).orElseThrow(DeliveryException.DeliveryNotFoundException::new);
     }
 
-    public Delivery getDeliveryByUlid(UUID ulid) {
-        return deliveryRepository.findByUlid(ulid).orElseThrow(DeliveryException.DeliveryNotFoundException::new);
+    public Delivery getDeliveryByUlid(String ulid) {
+
+        return deliveryRepository.findByUlid(Base64.getUrlDecoder().decode(ulid)).orElseThrow(DeliveryException.DeliveryNotFoundException::new);
     }
 
     public void validateMember(Delivery delivery, UUID memberUid) {
         if (!delivery.getMember().getUid().equals(memberUid)) {
+            throw new DeliveryException.DeliveryAccessDeniedException();
+        }
+    }
+
+    public void validateMember(Delivery delivery, byte[] memberUlid) {
+        if (!delivery.getMember().getUlid().equals(memberUlid)) {
             throw new DeliveryException.DeliveryAccessDeniedException();
         }
     }

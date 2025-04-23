@@ -25,8 +25,8 @@ public class DeliveryServiceV2 {
     private final DeliveryAddressValidationService deliveryAddressValidationService;
 
     //배송지 등록
-    public void createDelivery(UUID memberUid, DeliveryRegRequestDTO dto) {
-        Member member = memberValidationService.findByUid(memberUid);
+    public void createDelivery(byte[] memberUid, DeliveryRegRequestDTO dto) {
+        Member member = memberValidationService.findByUlid(memberUid);
         Delivery delivery = dto.toDelivery(member);
 
         //우편번호 유효성 검사
@@ -37,7 +37,7 @@ public class DeliveryServiceV2 {
     }
 
     //배송지 삭제
-    public void deleteDelivery(UUID memberUid, UUID deliveryUlid) {
+    public void deleteDelivery(byte[] memberUid, String deliveryUlid) {
         Delivery delivery = deliveryValidationService.getDeliveryByUlid(deliveryUlid);
 
         //배송지 접근 권한 검사
@@ -48,21 +48,21 @@ public class DeliveryServiceV2 {
     }
 
     //배송지 조회
-    public List<DeliveryResponseDTO> getDelivery(UUID memberUid) {
+    public List<DeliveryResponseDTO> getDelivery(byte[] memberUid) {
 
-        memberValidationService.existsByUid(memberUid);
+        memberValidationService.existsByUlid(memberUid);
 
-        return deliveryRepository.findByMemberUidAsDTO(memberUid);
+        return deliveryRepository.findByMemberUlidAsDTO(memberUid);
 
     }
 
     //배송지 수정
     @Transactional
-    public void updateDelivery(UUID memberUid, UUID deliveryUid, DeliveryRegRequestDTO dto) {
-        Delivery delivery = deliveryValidationService.getDeliveryByUlid(deliveryUid);
+    public void updateDelivery(byte[] memberUlid, String deliveryUlid, DeliveryRegRequestDTO dto) {
+        Delivery delivery = deliveryValidationService.getDeliveryByUlid(deliveryUlid);
 
         //배송지 접근 권한 검사
-        deliveryValidationService.validateMember(delivery,memberUid);
+        deliveryValidationService.validateMember(delivery,memberUlid);
 
         //우편번호 유효성 검사
         deliveryAddressValidationService.validateZipCode(dto.zipCode());
@@ -73,13 +73,13 @@ public class DeliveryServiceV2 {
 
     //기본 배송지 설정
     @Transactional
-    public void setDeliveryDefault(UUID memberUid, UUID deliveryUlid) {
+    public void setDeliveryDefault(byte[] memberUid, String deliveryUlid) {
         Delivery delivery = deliveryValidationService.getDeliveryByUlid(deliveryUlid);
 
         //배송지 접근 권한 검사
         deliveryValidationService.validateMember(delivery,memberUid);
 
-        Member member = memberValidationService.findByUid(memberUid);
+        Member member = memberValidationService.findByUlid(memberUid);
 
         member.setDefaultDelivery(delivery);
     }
