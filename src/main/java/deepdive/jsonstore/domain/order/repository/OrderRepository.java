@@ -19,7 +19,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByUid(UUID uid);
     Optional<Order> findByUlid(byte[] ulid);
 
-    @Query("SELECT O FROM Order o JOIN FETCH o.member")
+    @Query("SELECT o FROM Order o JOIN FETCH o.member")
     Page<Order> findByMemberId(long id, Pageable pageable);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
