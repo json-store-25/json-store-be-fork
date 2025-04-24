@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public class DeliveryValidationService {
     }
 
     public void validateMember(Delivery delivery, byte[] memberUlid) {
-        if (!delivery.getMember().getUlid().equals(memberUlid)) {
+        if (!Arrays.equals(delivery.getMember().getUlid(), memberUlid)) {
             throw new DeliveryException.DeliveryAccessDeniedException();
         }
     }

@@ -37,11 +37,11 @@ public class DeliveryServiceV2 {
     }
 
     //배송지 삭제
-    public void deleteDelivery(byte[] memberUid, String deliveryUlid) {
+    public void deleteDelivery(byte[] memberUlid, String deliveryUlid) {
         Delivery delivery = deliveryValidationService.getDeliveryByUlid(deliveryUlid);
 
         //배송지 접근 권한 검사
-        deliveryValidationService.validateMember(delivery,memberUid);
+        deliveryValidationService.validateMember(delivery,memberUlid);
 
         deliveryRepository.delete(delivery);
         log.info("배송지 삭제 완료: {}", delivery.getUlid().toString());
