@@ -41,7 +41,8 @@ public class MemberJwtTokenProvider {
     // 토큰 생성
     public JwtTokenDto generateToken(Authentication authentication) {
         CustomMemberDetails memberDetails = (CustomMemberDetails) authentication.getPrincipal();
-        log.info("memberUid = {}, memberUlid = {}, memberUsername = {}", memberDetails.getUid(), memberDetails.getUlid(), memberDetails.getUsername());
+        log.info("base64encoding member ulid = {}", Base64.getUrlEncoder().encode(memberDetails.getUlid()));
+
 
         // 권한 정보를 String으로 변환
         String authorities = memberDetails.getAuthorities().stream()
@@ -74,7 +75,8 @@ public class MemberJwtTokenProvider {
         Claims claims = parseClaims(token);
         UUID uuid = UUID.fromString(claims.getSubject());
         CustomMemberDetails customMemberDetails = customMemberDetailsService.loadUserByUuid(uuid);  // UUID로 사용자 로드
-        log.info("ulid={}", customMemberDetails.getUlid());
+        log.info("base64encoding member ulid = {}", Base64.getUrlEncoder().encode(customMemberDetails.getUlid()));
+
 
         return new UsernamePasswordAuthenticationToken(customMemberDetails, "", customMemberDetails.getAuthorities());  // 인증 객체 반환
     }

@@ -41,7 +41,7 @@ public class AdminJwtTokenProvider {
     // UUID와 권한만 포함된 토큰 생성
     public JwtTokenDto generateToken(Authentication authentication) {
         AdminMemberDetails adminDetails = (AdminMemberDetails) authentication.getPrincipal();
-        log.info("adminUid = {}, adminUlid = {}, adminUsername = {}", adminDetails.getAdminUid(), adminDetails.getAdminUlid(), adminDetails.getUsername());
+        log.info("base64encoding admin ulid = {}", Base64.getUrlEncoder().encode(adminDetails.getAdminUlid()));
         String authorities = adminDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -68,7 +68,7 @@ public class AdminJwtTokenProvider {
         Claims claims = parseClaims(token);
         UUID adminUid = UUID.fromString(claims.getSubject());  // 토큰에서 UUID 추출
         AdminMemberDetails adminDetails = adminMemberDetailsService.loadUserByUuid(adminUid);  // UUID로 사용자 로드
-        log.info("ulid={}", adminDetails.getAdminUlid());
+        log.info("base64encoding admin ulid = {}", Base64.getUrlEncoder().encode(adminDetails.getAdminUlid()));
 
         return new UsernamePasswordAuthenticationToken(adminDetails, "", adminDetails.getAuthorities());
     }

@@ -59,6 +59,7 @@ public class AdminJwtAuthenticationFilter extends OncePerRequestFilter {
 
             // 토큰이 유효한 경우 Authentication 설정
             Authentication authentication = adminJwtTokenProvider.getAuthentication(token);
+            log.info("인증된 사용자 principal = {}", authentication.getPrincipal());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             filterChain.doFilter(request, response);
