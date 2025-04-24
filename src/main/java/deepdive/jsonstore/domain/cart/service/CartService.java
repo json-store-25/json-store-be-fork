@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,9 +49,10 @@ public class CartService {
     // 카트에 상품 추가
     public Cart addProductToCart(byte[] memberUid, byte[] productUid, Long amount) {
         Member member = validateService.validateMember(memberUid);
-        log.info("member = {}", member.getUlid());
+        log.info("member={}", Base64.getUrlEncoder().encodeToString(member.getUlid()));
 
         Product product = validateService.validateProduct(productUid, amount);
+        log.info("product={}", Base64.getUrlEncoder().encodeToString(product.getUlid()));
 
         // 이미 있는 상품을 등록하려는 경우
         Cart cart = alreadyInCart(member, product, amount);

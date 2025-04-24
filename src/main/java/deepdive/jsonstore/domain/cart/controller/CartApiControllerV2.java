@@ -29,12 +29,13 @@ public class CartApiControllerV2 {
 
     // 장바구니에 상품 추가
     @PostMapping
-    public ResponseEntity<CartResponse> addProductToCart(
-            @AuthenticationPrincipal(expression = "ulid") byte[] memberUid,
+    public ResponseEntity<CartResponseV2> addProductToCart(
+            @AuthenticationPrincipal(expression = "ulid") byte[] memberUlid,
             @Valid @RequestBody CartRequestV2 request) {
-        log.info("ulid = {}", memberUid);
-        Cart cart = cartService.addProductToCart(memberUid, request.getProductUid(), request.getAmount());
-        return ResponseEntity.ok(new CartResponse(cart));
+        log.info("member={}", Base64.getUrlEncoder().encodeToString(memberUlid));
+
+        Cart cart = cartService.addProductToCart(memberUlid, request.getProductUid(), request.getAmount());
+        return ResponseEntity.ok(new CartResponseV2(cart));
     }
 
     // 장바구니 상품 삭제
