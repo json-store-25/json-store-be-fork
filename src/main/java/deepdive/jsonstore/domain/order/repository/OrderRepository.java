@@ -44,5 +44,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             WHERE o.ulid = :ulid
                 AND p.status = 'ON_SALE'
 	    """)
-    Optional<Order> findWithLockByUid(@Param("ulid") byte[] ulid);
+    Optional<Order> findWithLockByUlid(@Param("ulid") byte[] ulid);
 }
