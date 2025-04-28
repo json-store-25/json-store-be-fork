@@ -7,8 +7,11 @@ import deepdive.jsonstore.domain.member.entity.Member;
 import deepdive.jsonstore.domain.product.entity.Product;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,9 +49,10 @@ public class CartService {
     // 카트에 상품 추가
     public Cart addProductToCart(byte[] memberUid, byte[] productUid, Long amount) {
         Member member = validateService.validateMember(memberUid);
-        log.info("member = {}", member.getUlid());
+        log.info("member={}", Base64.getUrlEncoder().encodeToString(member.getUlid()));
 
         Product product = validateService.validateProduct(productUid, amount);
+        log.info("product={}", Base64.getUrlEncoder().encodeToString(product.getUlid()));
 
         // 이미 있는 상품을 등록하려는 경우
         Cart cart = alreadyInCart(member, product, amount);
@@ -70,7 +74,8 @@ public class CartService {
 
     // 카트에 상품이 존재할 경우 수량 체크 후 수량추가
     public Cart alreadyInCart(Member member, Product product, Long amount) {
-        Cart cart = cartRepository.findByMemberAndProduct(member, product);
+        Cart cart = cartRepository.findByMemberAndProduct(member, product)
+                .orElseThrow(CartException.CartNotFoundException::new);
 
         if (cart != null) {
             amount = validateService.validateAmount(cart, product, amount);
@@ -92,21 +97,15 @@ public class CartService {
     // 카트 리스트 조회
     public List<Cart> getCartByMemberUid(UUID memberUid) {
         // 멤버ID 기반으로 카트 리스트 조회
-        List<Cart> carts = cartRepository.findByMemberUid(memberUid);
-
-        // 카트 리스트가 비었는지 확인
-        validateService.validateCartList(carts);
+        List<Cart> carts = cartRepository.findByMember_Uid(memberUid);
 
         return carts;
     }
 
     // 카트 리스트 조회
-    public List<Cart> getCartByMemberUid(byte[] memberUid) {
+    public Page<Cart> getCartByMemberUid(byte[] memberUid, Pageable pageable) {
         // 멤버ID 기반으로 카트 리스트 조회
-        List<Cart> carts = cartRepository.findByMemberUlid(memberUid);
-
-        // 카트 리스트가 비었는지 확인
-        validateService.validateCartList(carts);
+        Page<Cart> carts = cartRepository.findByMember_Ulid(memberUid, pageable);
 
         return carts;
     }
