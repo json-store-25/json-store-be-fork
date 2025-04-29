@@ -89,6 +89,9 @@ dependencies {
 
     // ULID
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
+
+    // Kafka
+    implementation 'org.springframework.kafka:spring-kafka'
 }
 
 tasks.named('test') {
