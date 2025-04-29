@@ -41,7 +41,16 @@ spring:
   elasticsearch:
     connection-timeout: 3s
 
-
+  kafka:
+    bootstrap-servers: localhost:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: group_id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 logging:
   level:
@@ -61,4 +70,3 @@ external:
 tosspayments:
   api-base: ${TOSSPAYMENTS_API_BASE:https://api.tosspayments.com}
   api-secret: ${TOSSPAYMENTS_API_SECRET:test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6}
-  
