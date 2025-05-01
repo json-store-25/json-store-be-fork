@@ -1,6 +1,6 @@
-package deepdive.jsonstore.domain.Stock.repository;
+package deepdive.jsonstore.domain.stock.repository;
 
-import deepdive.jsonstore.domain.Stock.entity.Stock;
+import deepdive.jsonstore.domain.stock.entity.Stock;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;

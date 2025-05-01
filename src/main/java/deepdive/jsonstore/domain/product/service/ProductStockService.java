@@ -5,6 +5,9 @@ import deepdive.jsonstore.domain.order.entity.OrderProduct;
 import deepdive.jsonstore.domain.product.entity.Product;
 import deepdive.jsonstore.domain.product.exception.ProductException;
 import deepdive.jsonstore.domain.product.repository.ProductRepository;
+import deepdive.jsonstore.domain.stock.dto.StockEventDto;
+import deepdive.jsonstore.domain.stock.service.StockEventProducer;
+import deepdive.jsonstore.domain.stock.service.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 public class ProductStockService {
 
     private final ProductRepository productRepository;
+    private final StockEventProducer stockEventProducer;
 
     // 리저브 스톡
     @Transactional

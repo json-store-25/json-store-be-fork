@@ -36,7 +36,7 @@ public class MemberJwtAuthenticationFilter extends OncePerRequestFilter {
 
         // TODO : 보안키 필터 마련할 것
         // 필터에 토큰이 없는 웹훅이 걸려서 일단 추가
-        if (requestURI.equals("/api/v2/orders/webhook")) {
+        if (requestURI.equals("/api/v2/orders/webhook") || requestURI.equals("/api/v2/orders/test")) {
             filterChain.doFilter(request, response);
             return;
         }

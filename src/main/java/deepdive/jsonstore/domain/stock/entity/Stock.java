@@ -1,4 +1,4 @@
-package deepdive.jsonstore.domain.Stock.entity;
+package deepdive.jsonstore.domain.stock.entity;
 
 import deepdive.jsonstore.common.util.UlidUtil;
 import jakarta.persistence.*;

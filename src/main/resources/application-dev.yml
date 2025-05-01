@@ -40,17 +40,19 @@ spring:
 
   elasticsearch:
     connection-timeout: 3s
-
+#
   kafka:
     bootstrap-servers: localhost:29092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    consumer:
-      group-id: group_id
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+#      value-serializer: org.apache.kafka.common.serialization.JsonSerializer
+#    consumer:
+##      group-id: group_id
+##      auto-offset-reset: earliest
+##      key-deserializer: org.apache.kafka.common.serialization.IntegerSerializer
+##      value-deserializer: org.apache.kafka.common.serialization.JsonSerializer
+#      properties:
+#        spring.json.trusted.packages: '*'
 
 logging:
   level:

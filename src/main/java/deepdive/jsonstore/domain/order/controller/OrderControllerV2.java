@@ -1,9 +1,11 @@
 package deepdive.jsonstore.domain.order.controller;
 
-import de.huxhorn.sulky.ulid.ULID;
 import deepdive.jsonstore.common.util.UlidUtil;
 import deepdive.jsonstore.domain.order.dto.*;
 import deepdive.jsonstore.domain.order.service.OrderService;
+import deepdive.jsonstore.domain.stock.dto.StockEventDto;
+import deepdive.jsonstore.domain.stock.entity.Stock;
+import deepdive.jsonstore.domain.stock.service.StockEventProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -11,16 +13,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -106,4 +104,15 @@ public class OrderControllerV2 {
         orderService.webhook(webhookRequest);
         return ResponseEntity.ok().build();
     }
+
+////    @PermitAll
+//    @GetMapping("/test")
+//    public void test() {
+//        stockEventProducer.sendEvent(
+//                StockEventDto.builder()
+//                        .productUlid(UlidUtil.createUlidBytes())
+////                        .productUlid(UlidUtil.createUlidBytes().toString())
+//                        .delta(3L)
+//                        .build());
+//    }
 }

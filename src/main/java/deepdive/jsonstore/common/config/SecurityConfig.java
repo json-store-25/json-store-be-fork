@@ -113,6 +113,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 //https://docs.tosspayments/com/reference/using-api/webhook-events
                                 "/api/v2/orders/webhook", //TODO : 웹훅 인증 필터 필요
+                                "/api/v2/orders/test", //TODO : 웹훅 인증 필터 필요
                                 "/api/v2/orders/confirm", //TODO : 외부 API 인증 체계 마련할 것 CORS이나
                                 "/", "/index.html", "/success.html/**", "/fail.html/**", "/favicon.ico", "/checkout.html",
                                  "/css/**", "/js/**", "/firebase-messaging-sw.js",

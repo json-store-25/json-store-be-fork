@@ -12,9 +12,12 @@ import deepdive.jsonstore.domain.order.entity.Order;
 import deepdive.jsonstore.domain.order.entity.OrderProduct;
 import deepdive.jsonstore.domain.order.entity.OrderStatus;
 import deepdive.jsonstore.domain.order.repository.OrderRepository;
-import deepdive.jsonstore.domain.product.entity.Product;
 import deepdive.jsonstore.domain.product.service.ProductStockService;
 import deepdive.jsonstore.domain.product.service.ProductValidationService;
+import deepdive.jsonstore.domain.stock.dto.StockEventDto;
+import deepdive.jsonstore.domain.stock.service.OrderProductDto;
+import deepdive.jsonstore.domain.stock.service.StockEventConsumer;
+import deepdive.jsonstore.domain.stock.service.StockEventProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.PessimisticLockingFailureException;
@@ -26,7 +29,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,6 +43,7 @@ public class OrderService {
     private final DeliveryService deliveryService;
     private final NotificationService notificationService;
     private final PaymentService paymentService;
+    private final StockEventProducer stockEventProducer;
 
     /** 주문 엔티티를 uid로 조회 */
     @Transactional
@@ -274,6 +277,7 @@ public class OrderService {
     public void confirmOrderV2(ConfirmRequest confirmRequest) {
 
         var uild = Base64.getUrlDecoder().decode(confirmRequest.orderId());
+        // 같은 주문이 동시에 들어올 수 있다. 근데 현재 구조는 이러면 프로덕트도 락에 걸린다.
         var order = orderRepository.findWithLockByUlid(uild)
                 .orElseThrow(OrderException.OrderNotFound::new); // 여기서 order + orderProducts + product + member 모두 fetch + lock
         if (confirmRequest.amount() != order.getTotal()) {
@@ -282,34 +286,47 @@ public class OrderService {
         }
 
         // 재고 검사
-//        orderValidationService.validateProductStock(order);
+        orderValidationService.validateProductStock(order);
         orderValidationService.validateExpiration(order);
 
         // consume
-        productStockService.consumeStock(order);
+        if (order.getOrderProducts() == null || order.getOrderProducts().isEmpty()) return;
+
+//        order.getOrderProducts().stream()
+//                .forEach(op -> stockEventProducer.sendEvent(StockEventDto.builder()
+//                            .productUlid(op.getUlid())
+//                            .delta(op.getQuantity())
+//                            .build())
+//                );
+        // orderProduct전체를 보내야할까?
+
+//        stockEventProducer.sendEvent(StockEventDto.builder()
+//                .orderProductDtos(OrderProductDto.from(order.getOrderProducts()));
 
         order.changeState(OrderStatus.PAYMENT_PENDING);
-
+        // 승인된 처리된 paymentKey 저장
         var paymentResponse = paymentService.confirm(confirmRequest);
 //        paymentService.confirmTest(confirmRequest);
         order.setPaymentKey(paymentResponse.get("paymentKey").toString());
         log.info("LOG={}", paymentResponse);
 
-        var sb = new StringBuilder();
-        var title = order.getTitle();
-        sb.append(title).append("\n");
-        sb.append(order.getTotal()).append("원 결제성공");
-        var notificationBody = sb.toString();
 
-        // 성공 알림 발송
-        try {
-            notificationService.sendNotification(
-                    order.getMember().getUid(),
-                    "결제 성공", notificationBody,
-                    NotificationCategory.ORDERED);
-        } catch (CommonException.InternalServerException e) {
-            log.warn("발송 실패"); // 재발송 전략?
-        }
+        //TODO : sendNotification 비동기화
+//        var sb = new StringBuilder();
+//        var title = order.getTitle();
+//        sb.append(title).append("\n");
+//        sb.append(order.getTotal()).append("원 결제성공");
+//        var notificationBody = sb.toString();
+//
+//        // 성공 알림 발송
+//        try {
+//            notificationService.sendNotification(
+//                    order.getMember().getUid(),
+//                    "결제 성공", notificationBody,
+//                    NotificationCategory.ORDERED);
+//        } catch (CommonException.InternalServerException e) {
+//            log.warn("발송 실패"); // 재발송 전략?
+//        }
     }
 
 

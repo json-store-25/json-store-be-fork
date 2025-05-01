@@ -1,14 +1,15 @@
-package deepdive.jsonstore.domain.Stock.service;
+package deepdive.jsonstore.domain.stock.service;
 
-import deepdive.jsonstore.domain.Stock.entity.Stock;
-import deepdive.jsonstore.domain.Stock.repository.StockRepository;
+import deepdive.jsonstore.domain.cart.exception.CartException;
+import deepdive.jsonstore.domain.order.exception.OrderException;
+import deepdive.jsonstore.domain.stock.entity.Stock;
+import deepdive.jsonstore.domain.stock.repository.StockRepository;
 import deepdive.jsonstore.domain.product.entity.Product;
 import deepdive.jsonstore.domain.product.exception.ProductException;
 import deepdive.jsonstore.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +41,10 @@ public class StockService {
                     .orElseThrow(ProductException.ProductNotFoundException::new);
             selected.add(stock);
             totalQuantity += stock.getQuantity();
+
+            if (selected.size() == RECORD_COUNT) {
+                throw new OrderException.OrderOutOfStockException();
+            }
         }
 
         // 차감
@@ -51,11 +56,6 @@ public class StockService {
                 stock.updateQuantity(stock.getQuantity() - delta);
             }
         }
-
-//        // 차감
-//        if (delta != 0) {
-//            throw new RuntimeException();
-//        }
     }
 
     /** 스톡 계산 */
