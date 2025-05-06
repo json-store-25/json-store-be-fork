@@ -50,4 +50,16 @@ public class OrderValidationService {
             throw new OrderException.NotPaidException();
         }
     }
+
+    public void validateOrderProductList(Order order) {
+        if (order.getOrderProducts().isEmpty() || order.getOrderProducts() == null) {
+            throw new OrderException.EmptyOrderException();
+        }
+    }
+
+    public void validateTotal(Order order, Long amount) {
+        if (amount != order.getTotal()) {
+            throw new OrderException.OrderTotalMismatchException();
+        }
+    }
 }
