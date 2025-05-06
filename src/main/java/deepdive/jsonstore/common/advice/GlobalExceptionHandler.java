@@ -57,6 +57,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(OrderException.class)
     public ResponseEntity<ErrorResponse> orderExceptionHandler(OrderException ex) {
+        log.error("Order Exception: {}", ex.getMessage(), ex);
         ErrorResponse response;
         if (ex instanceof OrderOutOfStockException orderOutOfStockException) {
             response = new ErrorExtraResponse<>(

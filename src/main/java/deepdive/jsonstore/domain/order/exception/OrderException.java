@@ -59,9 +59,14 @@ public class OrderException extends RuntimeException {
             super(OrderErrorCode.ORDER_TOTAL_MISMATCH);
         }
     }
-        public static class OrderCurrencyMismatchException extends OrderException {
+
+    public static class OrderCurrencyMismatchException extends OrderException {
         public OrderCurrencyMismatchException() {
             super(OrderErrorCode.ORDER_CURRENCY_MISMATCH);
         }
+    }
+
+    public static class EmptyOrderException extends OrderException {
+        public EmptyOrderException() {super(OrderErrorCode.ORDER_EMPTY);}
     }
 }
