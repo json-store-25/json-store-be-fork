@@ -29,6 +29,7 @@ public class ProductServiceV2 {
 	private final ProductEsRepository productEsRepository;
     private final MeterRegistry meterRegistry;
 	private final RedisTemplate<String, Object> redisTemplate;
+
 	private static final String CACHE_KEY_BASE = "productPage:";
 	private static final long TTL = 5; // 하드코딩했습니다.
 
