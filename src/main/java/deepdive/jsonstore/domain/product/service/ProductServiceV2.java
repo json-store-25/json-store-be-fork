@@ -46,26 +46,31 @@ public class ProductServiceV2 {
 		Category category = condition.category();
 		boolean hasSearch = name != null;
 		boolean hasCategory = category != null;
-		boolean isFirstPage = pageable.getPageNumber() == 1;
+//		log.info("page={}", pageable.getPageNumber());
+		boolean isFirstPage = pageable.getPageNumber() == 0;
 
 		// 캐시 확인
 		String cacheKey = CACHE_KEY_BASE + category + ":" + name + ":" + pageable.getSort();
 
 		var cached = (ProductCache) redisTemplate.opsForValue().get(cacheKey);
 		if (cached != null) { // && !cached.content().isEmpty() 아예 상품이 없는 경우
-			log.info("from cache");
+			log.info("from cache={}", cached);
 			return new PageImpl<>(cached.content(), pageable, cached.totalElements()); // 캐시를 바로 반환
 		}
 
 		// 쿼리
 		Page<ProductDocument> productDocuments;
 		if (hasSearch && !hasCategory) {
+//			log.info("from Search");
 			productDocuments = productEsRepository.searchByName(name, pageable); // 키워드(이름)
 		} else if (!hasSearch && hasCategory ) {
+//			log.info("from category");
 			productDocuments = productEsRepository.searchByCategory(category, pageable); // 카테고리
 		} else if (hasSearch && hasCategory) {
+//			log.info("from all condition");
 			productDocuments = productEsRepository.searchByCategoryAndName(category, name, pageable); // 복합
 		} else {
+//			log.info("from none");
 			productDocuments = productEsRepository.findAll(pageable); // 전체
 		}
 
@@ -79,6 +84,7 @@ public class ProductServiceV2 {
 					.content(productResponses.getContent())
 					.totalElements(productResponses.getTotalElements())
 					.build();
+			log.info("save cache={}", cache);
 			redisTemplate.opsForValue().set(cacheKey, cache, Duration.ofMinutes(TTL));
 		}
 
