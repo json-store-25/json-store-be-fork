@@ -438,8 +438,10 @@ scrape_configs:
 ### 동시성 처리
 
 ### 실시간 모니터링 및 성능 대시보드 구성
+![image](https://github.com/user-attachments/assets/f41796b5-e8de-4f81-b4ae-294cc042a870)
 
 ### 안정적 배포환경 구축
+![image](https://github.com/user-attachments/assets/472ae035-7b1c-49c5-ae35-af9801e42c37)
 
 
 ----
@@ -496,3 +498,8 @@ ex)쓰레드 및 커넥션 풀, API 병목 현상
 
 ---
 # ✏️ 느낀점
+## 박성근
+## 정신우
+## 전준영
+## 김윤영
+## 장효리
