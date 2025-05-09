@@ -1,12 +1,12 @@
 # Json Store
 
-### 📌 프로젝트 소개
+## 📌 프로젝트 소개
 > 이커머스 [Json Store](https://github.com/json-store-25/json-store-be)의 성능을 개선합니다.
 
 
 ----
 
-### 😎 역할분담
+## 😎 역할분담
 |                         팀장                          |                                팀원                                 |                             팀원                             |                               팀원                               |                             팀원                             |
 |:---------------------------------------------------:|:-----------------------------------------------------------------:|:----------------------------------------------------------:|:--------------------------------------------------------------:|:----------------------------------------------------------:|
 |      [**박성근**](https://github.com/p-seonggeun)      |               [**정신우**](https://github.com/cupokki)               |           [**전준영**](https://github.com/Isonade2)           |              [**김윤영**](https://github.com/yunrry)              |           [**장효리**](https://github.com/hyori526)           |
@@ -419,7 +419,7 @@ scrape_configs:
 ----
 ## 📑 성능개선 결과
 ### 처리량, 응답시간 향상
-<h4>**UUID -> ULID**</h4>
+<h4><b>UUID -> ULID</b></h4>
 기존에는 PK와 UUID 컬럼을 따로 두고, 비즈니스 로직에서 UUID로 레코드를 조회하는 구조
 
 - UUID: DB(MySQL 등)에서 삽입 시 랜덤 I/O 발생 → 성능 저하 유발
@@ -431,15 +431,26 @@ scrape_configs:
 **평균 응답속도 약 5% 개선**
 
 ![image](https://github.com/user-attachments/assets/3d018b2b-c47b-4c46-adbb-54295f3f0d2b)
-<h4>**캐싱**</h4>
+<h4><b>캐싱<b></h4>
+
 ![image](https://github.com/user-attachments/assets/c19b2a25-65bc-47ca-b0b5-4ebaed346376)
-<h4>**ElasticSearch 엔진 적용**</h4>
+<h4><b>ElasticSearch 엔진 적용</b></h4>
+
 ![image](https://github.com/user-attachments/assets/70533c10-925e-4f02-992d-3632e4d3ab22)
 ![image](https://github.com/user-attachments/assets/1304c286-5bd9-4138-9925-3b84f7134319)
-<h4>**OSIV 설정 OFF**</h4>
+<h4><b>OSIV 설정 OFF</b></h4>
+
 ![image](https://github.com/user-attachments/assets/05ef188a-2b64-4855-9b61-ee4ca624bb67)
-<h4>**버퍼 풀 사이즈 조정**</h4>
+<h4><b>OSIV, 버퍼 풀 사이즈 조정</b></h4>
+- OSIV OFF, 각 응답시간 364ms → 331ms, 약 9% 개선
+
 ![image](https://github.com/user-attachments/assets/80eaa0d9-f160-4d1d-ac3f-b7d81af286bc)
+
+- 버퍼 풀 사이즈, 인스턴스 조정 응답시간 409ms -> 348ms, 약 15% 개선
+
+![image](https://github.com/user-attachments/assets/25801cf6-c80d-4207-a50c-c933e476b506)
+
+
 ### 동시성 처리
 
 ### 실시간 모니터링 및 성능 대시보드 구성
