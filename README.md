@@ -437,6 +437,31 @@ scrape_configs:
 
 ### 동시성 처리
 
+**메시지 브로커로 Kafka 사용**
+
+- 주문 승인 과정에서 기존 타임아웃 등으로 발생하는 처리 순서가 깨지는 문제 발생
+- 메시지 큐를 도입하여 순서보장
+  - 신뢰성 향상, RPS 하락
+- 재고 차감이 순서대로 진행되어야함(붉은 사각형)
+- Kafka
+  - 난이도 높음. 
+  - 현재 서버에 추후에 분리 가능성이 높은 서비스 많음
+  - 단순 큐가 아니라,  메시지 로그 형태로써 서비스 내결함성이 높음.
+
+![image](https://github.com/user-attachments/assets/80d9d790-654a-4440-b762-1282c1af5c6e)
+
+![image](https://github.com/user-attachments/assets/0061164e-f07d-4b4d-842b-f420e95d4116)
+
+**기존에 race condition이 빈번히 발생**
+
+![image](https://github.com/user-attachments/assets/92991736-29bc-4a8b-b7de-ff546c246e13)
+![image](https://github.com/user-attachments/assets/ee4c0174-8d8d-43b8-a9ab-2c2413f80df4)
+
+**재고 레코드 분산 저장**
+
+![image](https://github.com/user-attachments/assets/fb14b06b-c67b-4c3e-a792-57a349b2513f)
+
+
 ### 실시간 모니터링 및 성능 대시보드 구성
 <h4><b>Spring Boot + Prometheus + Grafana</b></h4>
 - 프로메테우스가 일정 시간마다 마이크로미터가 노출한 데이터를 수집해감, 실시간 자원 사용량, 비즈니스 특화 메트릭 측정가능
