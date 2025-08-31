@@ -56,7 +56,7 @@ dependencies {
 
     implementation 'org.json:json:20230227'
 
-    // env
+    // .env
     implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 
     // jwt
@@ -91,12 +91,7 @@ dependencies {
     // ULID
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
-    //Metric
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'io.micrometer:micrometer-registry-prometheus'
 
-    //mapper
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
 tasks.named('test') {
